@@ -1,0 +1,10 @@
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\bin\Debug\Redactor.exe.config
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\bin\Debug\Redactor.exe
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\bin\Debug\Redactor.pdb
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\obj\Debug\Redactor.csproj.AssemblyReference.cache
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\obj\Debug\Redactor.Form1.resources
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\obj\Debug\Redactor.Properties.Resources.resources
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\obj\Debug\Redactor.csproj.GenerateResource.cache
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\obj\Debug\Redactor.csproj.CoreCompileInputs.cache
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\obj\Debug\Redactor.exe
+C:\Users\Саша\Desktop\ImageEdit\Redactor\Redactor\obj\Debug\Redactor.pdb
