@@ -85,5 +85,50 @@ namespace Matrix
         }
     }
 
-    
+    class SobelFilter : MatrixFilters
+    {
+        //Sobel operator kernel for horizontal pixel changes
+        private static double[,] xSobel
+        {
+            get
+            {
+                return new double[,]
+                {
+            { -1, 0, 1 },
+            { -2, 0, 2 },
+            { -1, 0, 1 }
+                };
+            }
+        }
+
+        //Sobel operator kernel for vertical pixel changes
+        private static double[,] ySobel
+        {
+            get
+            {
+                return new double[,]
+                {
+            {  1,  2,  1 },
+            {  0,  0,  0 },
+            { -1, -2, -1 }
+                };
+            }
+        }
+
+        public void createSobelKernel()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX, sizeY];
+            for (int y = 1; y < sizeY - 1; y++)
+            {
+                for (int x = 1; x < sizeX - 1; x++)
+                {
+                    
+                }
+            }
+        }
+
+    }
+
 }

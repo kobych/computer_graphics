@@ -33,6 +33,59 @@ namespace Matrix
             return resultImage;
 
         }
+        
+    }
 
+    class InvertFilter : Filters
+    {
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            Color sourceColor = sourceImage.GetPixel(x, y);
+            Color resultColor = Color.FromArgb(255 - sourceColor.R, 255 - sourceColor.G, 255 - sourceColor.B);
+            return resultColor;
+        }
+    }
+
+    class SepiaFilter : Filters
+    {
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            Color sourceColor = sourceImage.GetPixel(x, y);
+            int tr = (int)(0.393 * sourceColor.R + 0.769 * sourceColor.G + 0.189 * sourceColor.B);
+            if (tr > 255) tr = 255;
+            int tg = (int)(0.349 * sourceColor.R + 0.686 * sourceColor.G + 0.168 * sourceColor.B);
+            if (tg > 255) tg = 255;
+            int tb = (int)(0.272 * sourceColor.R + 0.534 * sourceColor.G + 0.131 * sourceColor.B);
+            if (tb > 255) tb = 255;
+            Color resultColor = Color.FromArgb(tr, tg, tb);
+            return resultColor;
+        }
+    }
+    class GreyFilter : Filters
+    {
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            Color sourceColor = sourceImage.GetPixel(x, y);
+            int intensity =(int) (0.299 * sourceColor.R + 0.587 * sourceColor.G + 0.114 * sourceColor.B);
+            Color resultColor = Color.FromArgb(intensity, intensity, intensity);
+            return resultColor;
+        }
+    }
+
+    class LuxFilter : Filters
+    {
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            int LuxConst = 100;
+            Color sourceColor = sourceImage.GetPixel(x, y);
+            int tr = (int)(sourceColor.R + LuxConst);
+            if (tr > 255) tr = 255;
+            int tg = (int)(sourceColor.G + LuxConst);
+            if (tg > 255) tg = 255;
+            int tb = (int)(sourceColor.B + LuxConst);
+            if (tb > 255) tb = 255;
+            Color resultColor = Color.FromArgb(tr, tg, tb);
+            return resultColor;
+        }
     }
 }

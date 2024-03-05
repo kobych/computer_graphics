@@ -18,3 +18,13 @@ C:\Users\s21380407\Desktop\Лабы\Matrix\Matrix\Matrix\obj\Debug\Matrix.csproj
 C:\Users\s21380407\Desktop\Лабы\Matrix\Matrix\Matrix\obj\Debug\Matrix.csproj.CoreCompileInputs.cache
 C:\Users\s21380407\Desktop\Лабы\Matrix\Matrix\Matrix\obj\Debug\Matrix.exe
 C:\Users\s21380407\Desktop\Лабы\Matrix\Matrix\Matrix\obj\Debug\Matrix.pdb
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\bin\Debug\Matrix.exe.config
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\bin\Debug\Matrix.exe
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\bin\Debug\Matrix.pdb
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\obj\Debug\Matrix.csprojAssemblyReference.cache
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\obj\Debug\Matrix.Form1.resources
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\obj\Debug\Matrix.Properties.Resources.resources
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\obj\Debug\Matrix.csproj.GenerateResource.cache
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\obj\Debug\Matrix.csproj.CoreCompileInputs.cache
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\obj\Debug\Matrix.exe
+C:\Users\Snack\source\repos\computer_graphics\Matrix\Matrix\obj\Debug\Matrix.pdb
