@@ -111,5 +111,21 @@ namespace Matrix
             pictureBox1.Image = resultImage;
             pictureBox1.Refresh();
         }
+
+        private void harpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new HarraFilter();
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void medianToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new MedianFilter();
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
     }
 }

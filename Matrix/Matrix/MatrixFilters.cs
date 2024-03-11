@@ -128,7 +128,8 @@ namespace Matrix
                 }
             }
         }
-        }
+
+    }
     class SharpFilter : MatrixFilters
     {
 
@@ -228,5 +229,128 @@ namespace Matrix
             return Color.FromArgb((int)resultR, (int)resultG, (int)resultB);
         }
     }
+    class HarraFilter : MatrixFilters
+    {
 
+        private static float[,] xHarra
+        {
+            get
+            {
+                return new float[,]
+                {
+            { 3, 0, -3 },
+            { 10, 0, -10 },
+            { 3, 0, -3 }
+                };
+            }
+        }
+
+        
+        private static float[,] yHarra
+        {
+            get
+            {
+                return new float[,]
+                {
+            {  3,  10,  3 },
+            {  0,  0,  0 },
+            { -3, -10, -3 }
+                };
+            }
+        }
+
+        public HarraFilter()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX, sizeY];
+            for (int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    kernel[y, x] = yHarra[y, x] * xHarra[y, x];
+                }
+            }
+        }
     }
+    class MedianFilter : MatrixFilters
+    {
+        protected float median;
+        static float FindMedian(float[,] matrix)
+        {
+            // Flatten the matrix into a 1D array
+            float[] arr = new float[matrix.GetLength(0)];
+            foreach (float row in matrix)
+            {
+                arr.AddRange(row);
+            }
+
+            // Sort the array
+            arr.Sort();
+
+            // Find the median element
+            int mid = arr.Count / 2;
+            float median;
+            if (arr.Count % 2 == 0)
+            {
+                median = (arr[mid - 1] + arr[mid]) / 2.0f;
+            }
+            else
+            {
+                median = arr[mid];
+            }
+
+            return median;
+        }
+
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            int radiusX = kernel.GetLength(0) / 2;
+            int radiusY = kernel.GetLength(1) / 2;
+
+            float resultR = 0;
+            float resultG = 0;
+            float resultB = 0;
+            
+
+
+
+            for (int i = -radiusX; i <= radiusX; i++)
+            {  
+                for (int j = -radiusY; j <= radiusY; j++)
+                {
+                    int idx = Clamp(x + i, 0, sourceImage.Width - 1);
+                    int idy = Clamp(y + j, 0, sourceImage.Height - 1);
+
+                    Color neighborColor = sourceImage.GetPixel(idx, idy);
+
+                    resultR += neighborColor.R * kernel[i + radiusX, j + radiusY];
+                    resultG += neighborColor.G * kernel[i + radiusX, j + radiusY];
+                    resultB += neighborColor.B * kernel[i + radiusX, j + radiusY];
+                }
+            }
+            median = ;
+            resultR = Clamp((int)resultR, 0, 255);
+            resultG = Clamp((int)resultG, 0, 255);
+            resultB = Clamp((int)resultB, 0, 255);
+
+            return Color.FromArgb((int)resultR, (int)resultG, (int)resultB);
+        }
+        public MedianFilter()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX, sizeY];
+            for (int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    kernel[y, x] = median;
+
+
+                }
+            }
+        }
+    }
+
+}

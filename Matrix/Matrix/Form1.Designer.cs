@@ -45,6 +45,8 @@ namespace Matrix
             this.фильтрСобеляToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sharpnessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.embossToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.harpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.medianToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -141,7 +143,9 @@ namespace Matrix
             this.фильтрГауссаToolStripMenuItem,
             this.фильтрСобеляToolStripMenuItem,
             this.sharpnessToolStripMenuItem,
-            this.embossToolStripMenuItem});
+            this.embossToolStripMenuItem,
+            this.harpToolStripMenuItem,
+            this.medianToolStripMenuItem});
             this.матричныеToolStripMenuItem.Name = "матричныеToolStripMenuItem";
             this.матричныеToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.матричныеToolStripMenuItem.Text = "Матричные";
@@ -181,6 +185,20 @@ namespace Matrix
             this.embossToolStripMenuItem.Text = "Emboss";
             this.embossToolStripMenuItem.Click += new System.EventHandler(this.embossToolStripMenuItem_Click);
             // 
+            // harpToolStripMenuItem
+            // 
+            this.harpToolStripMenuItem.Name = "harpToolStripMenuItem";
+            this.harpToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.harpToolStripMenuItem.Text = "Harra";
+            this.harpToolStripMenuItem.Click += new System.EventHandler(this.harpToolStripMenuItem_Click);
+            // 
+            // medianToolStripMenuItem
+            // 
+            this.medianToolStripMenuItem.Name = "medianToolStripMenuItem";
+            this.medianToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.medianToolStripMenuItem.Text = "Median";
+            this.medianToolStripMenuItem.Click += new System.EventHandler(this.medianToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -218,6 +236,8 @@ namespace Matrix
         private System.Windows.Forms.ToolStripMenuItem luxToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sharpnessToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem embossToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem harpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem medianToolStripMenuItem;
     }
 }
 
