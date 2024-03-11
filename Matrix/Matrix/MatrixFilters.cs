@@ -88,11 +88,11 @@ namespace Matrix
     class SobelFilter : MatrixFilters
     {
         //Sobel operator kernel for horizontal pixel changes
-        private static double[,] xSobel
+        private static float[,] xSobel
         {
             get
             {
-                return new double[,]
+                return new float[,]
                 {
             { -1, 0, 1 },
             { -2, 0, 2 },
@@ -102,11 +102,11 @@ namespace Matrix
         }
 
         //Sobel operator kernel for vertical pixel changes
-        private static double[,] ySobel
+        private static float[,] ySobel
         {
             get
             {
-                return new double[,]
+                return new float[,]
                 {
             {  1,  2,  1 },
             {  0,  0,  0 },
@@ -115,20 +115,118 @@ namespace Matrix
             }
         }
 
-        public void createSobelKernel()
+        public SobelFilter()
         {
             int sizeX = 3;
             int sizeY = 3;
             kernel = new float[sizeX, sizeY];
-            for (int y = 1; y < sizeY - 1; y++)
+            for (int y = 0; y < sizeY; y++)
             {
-                for (int x = 1; x < sizeX - 1; x++)
+                for (int x = 0; x < sizeX; x++)
                 {
+                    kernel[y, x] = ySobel[y, x] * xSobel[y, x];
+                }
+            }
+        }
+        }
+    class SharpFilter : MatrixFilters
+    {
+
+        private static float[,] sharp
+        {
+            get
+            {
+                return new float[,]
+                {
+            { 0, -1, 0 },
+            { -1, 5, -1 },
+            { 0, -1, 0 }
+                };
+            }
+        }
+
+        public SharpFilter()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX, sizeY];
+            for (int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    kernel[y, x] = sharp[y, x];
                     
                 }
             }
         }
 
     }
+    class EmbossFilter : MatrixFilters
+    {
 
-}
+        private static float[,] emboss
+        {
+            get
+            {
+                return new float[,]
+                {
+            { 0, 1, 0 },
+            { 1, 0, -1 },
+            { 0, -1, 0 }
+                };
+            }
+        }
+
+        public EmbossFilter()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX, sizeY];
+            for (int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    kernel[y, x] = emboss[y, x];
+                    
+
+                }
+            }
+        }
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            int radiusX = kernel.GetLength(0) / 2;
+            int radiusY = kernel.GetLength(1) / 2;
+
+            float resultR = 0;
+            float resultG = 0;
+            float resultB = 0;
+
+            for (int i = -radiusX; i <= radiusX; i++)
+            {
+                for (int j = -radiusY; j <= radiusY; j++)
+                {
+                    int idx = Clamp(x + i, 0, sourceImage.Width - 1);
+                    int idy = Clamp(y + j, 0, sourceImage.Height - 1);
+
+                    Color neighborColor = sourceImage.GetPixel(idx, idy);
+
+                    resultR += neighborColor.R * kernel[i + radiusX, j + radiusY];
+                    resultG += neighborColor.G * kernel[i + radiusX, j + radiusY];
+                    resultB += neighborColor.B * kernel[i + radiusX, j + radiusY];
+                }
+            }
+            resultR += 255;
+            resultG += 255;
+            resultB += 255;
+            resultR /= 2;
+            resultG /= 2;
+            resultB /= 2;
+            resultR = Clamp((int)resultR, 0, 255);
+            resultG = Clamp((int)resultG, 0, 255);
+            resultB = Clamp((int)resultB, 0, 255);
+
+            return Color.FromArgb((int)resultR, (int)resultG, (int)resultB);
+        }
+    }
+
+    }
