@@ -275,14 +275,14 @@ namespace Matrix
     }
     class MedianFilter : MatrixFilters
     {
-        protected float median;
+        
         static float FindMedian(float[,] matrix)
         {
             // Flatten the matrix into a 1D array
-            float[] arr = new float[matrix.GetLength(0)];
-            foreach (float row in matrix)
+            List<float> arr = new List<float>();
+            foreach (var row in matrix)
             {
-                arr.AddRange(row);
+                arr.Add(row);
             }
 
             // Sort the array
@@ -303,49 +303,38 @@ namespace Matrix
             return median;
         }
 
-        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        public static float[,] MedianTask(Bitmap source)
         {
-            int radiusX = kernel.GetLength(0) / 2;
-            int radiusY = kernel.GetLength(1) / 2;
 
-            float resultR = 0;
-            float resultG = 0;
-            float resultB = 0;
-            
-
-
-
-            for (int i = -radiusX; i <= radiusX; i++)
-            {  
-                for (int j = -radiusY; j <= radiusY; j++)
-                {
-                    int idx = Clamp(x + i, 0, sourceImage.Width - 1);
-                    int idy = Clamp(y + j, 0, sourceImage.Height - 1);
-
-                    Color neighborColor = sourceImage.GetPixel(idx, idy);
-
-                    resultR += neighborColor.R * kernel[i + radiusX, j + radiusY];
-                    resultG += neighborColor.G * kernel[i + radiusX, j + radiusY];
-                    resultB += neighborColor.B * kernel[i + radiusX, j + radiusY];
+            var width = source.Width;
+            var height = source.Height;
+            var medianPixels = new float[width, height];
+            float[,] original = new float[width, height];
+            Color sourceColor;
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                { 
+                    sourceColor = source.GetPixel(x, y);
+                    original[x, y] = sourceColor.GetBrightness();
                 }
-            }
-            median = ;
-            resultR = Clamp((int)resultR, 0, 255);
-            resultG = Clamp((int)resultG, 0, 255);
-            resultB = Clamp((int)resultB, 0, 255);
-
-            return Color.FromArgb((int)resultR, (int)resultG, (int)resultB);
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                    medianPixels[x, y] = FindMedian(original);
+            return medianPixels;
         }
-        public MedianFilter()
+        public MedianFilter(Bitmap originalImage)
         {
             int sizeX = 3;
             int sizeY = 3;
             kernel = new float[sizeX, sizeY];
+            var median = new float[sizeX,sizeY];
+            median = MedianTask(originalImage);
+            
             for (int y = 0; y < sizeY; y++)
             {
                 for (int x = 0; x < sizeX; x++)
                 {
-                    kernel[y, x] = median;
+                    kernel[y, x] = median[y,x];
 
 
                 }

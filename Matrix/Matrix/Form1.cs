@@ -122,7 +122,7 @@ namespace Matrix
 
         private void medianToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Filters filter = new MedianFilter();
+            Filters filter = new MedianFilter(image);
             Bitmap resultImage = filter.processImage(image);
             pictureBox1.Image = resultImage;
             pictureBox1.Refresh();
