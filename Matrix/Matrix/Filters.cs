@@ -9,6 +9,7 @@ namespace Matrix
 {
     abstract class Filters
     {
+        public Bitmap original ;
         protected abstract Color calculateNewPixelColor(Bitmap sourceImage, int x, int y);
 
         public int Clamp(int value, int min, int max)

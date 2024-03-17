@@ -88,11 +88,11 @@ namespace Matrix
     class SobelFilter : MatrixFilters
     {
         //Sobel operator kernel for horizontal pixel changes
-        private static double[,] xSobel
+        private static float[,] xSobel
         {
             get
             {
-                return new double[,]
+                return new float[,]
                 {
             { -1, 0, 1 },
             { -2, 0, 2 },
@@ -102,11 +102,11 @@ namespace Matrix
         }
 
         //Sobel operator kernel for vertical pixel changes
-        private static double[,] ySobel
+        private static float[,] ySobel
         {
             get
             {
-                return new double[,]
+                return new float[,]
                 {
             {  1,  2,  1 },
             {  0,  0,  0 },
@@ -115,20 +115,231 @@ namespace Matrix
             }
         }
 
-        public void createSobelKernel()
+        public SobelFilter()
         {
             int sizeX = 3;
             int sizeY = 3;
             kernel = new float[sizeX, sizeY];
-            for (int y = 1; y < sizeY - 1; y++)
+            for (int y = 0; y < sizeY; y++)
             {
-                for (int x = 1; x < sizeX - 1; x++)
+                for (int x = 0; x < sizeX; x++)
                 {
+                    kernel[y, x] = ySobel[y, x] * xSobel[y, x];
+                }
+            }
+        }
+
+    }
+    class SharpFilter : MatrixFilters
+    {
+
+        private static float[,] sharp
+        {
+            get
+            {
+                return new float[,]
+                {
+            { 0, -1, 0 },
+            { -1, 5, -1 },
+            { 0, -1, 0 }
+                };
+            }
+        }
+
+        public SharpFilter()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX, sizeY];
+            for (int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    kernel[y, x] = sharp[y, x];
                     
                 }
             }
         }
 
+    }
+    class EmbossFilter : MatrixFilters
+    {
+
+        private static float[,] emboss
+        {
+            get
+            {
+                return new float[,]
+                {
+            { 0, 1, 0 },
+            { 1, 0, -1 },
+            { 0, -1, 0 }
+                };
+            }
+        }
+
+        public EmbossFilter()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX, sizeY];
+            for (int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    kernel[y, x] = emboss[y, x];
+                    
+
+                }
+            }
+        }
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            int radiusX = kernel.GetLength(0) / 2;
+            int radiusY = kernel.GetLength(1) / 2;
+
+            float resultR = 0;
+            float resultG = 0;
+            float resultB = 0;
+
+            for (int i = -radiusX; i <= radiusX; i++)
+            {
+                for (int j = -radiusY; j <= radiusY; j++)
+                {
+                    int idx = Clamp(x + i, 0, sourceImage.Width - 1);
+                    int idy = Clamp(y + j, 0, sourceImage.Height - 1);
+
+                    Color neighborColor = sourceImage.GetPixel(idx, idy);
+
+                    resultR += neighborColor.R * kernel[i + radiusX, j + radiusY];
+                    resultG += neighborColor.G * kernel[i + radiusX, j + radiusY];
+                    resultB += neighborColor.B * kernel[i + radiusX, j + radiusY];
+                }
+            }
+            resultR += 255;
+            resultG += 255;
+            resultB += 255;
+            resultR /= 2;
+            resultG /= 2;
+            resultB /= 2;
+            resultR = Clamp((int)resultR, 0, 255);
+            resultG = Clamp((int)resultG, 0, 255);
+            resultB = Clamp((int)resultB, 0, 255);
+
+            return Color.FromArgb((int)resultR, (int)resultG, (int)resultB);
+        }
+    }
+    class HarraFilter : MatrixFilters
+    {
+
+        private static float[,] xHarra
+        {
+            get
+            {
+                return new float[,]
+                {
+            { 3, 0, -3 },
+            { 10, 0, -10 },
+            { 3, 0, -3 }
+                };
+            }
+        }
+
+        
+        private static float[,] yHarra
+        {
+            get
+            {
+                return new float[,]
+                {
+            {  3,  10,  3 },
+            {  0,  0,  0 },
+            { -3, -10, -3 }
+                };
+            }
+        }
+
+        public HarraFilter()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX, sizeY];
+            for (int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    kernel[y, x] = yHarra[y, x] * xHarra[y, x];
+                }
+            }
+        }
+    }
+    class MedianFilter : MatrixFilters
+    {
+        
+        static float FindMedian(float[,] matrix)
+        {
+            // Flatten the matrix into a 1D array
+            List<float> arr = new List<float>();
+            foreach (var row in matrix)
+            {
+                arr.Add(row);
+            }
+
+            // Sort the array
+            arr.Sort();
+
+            // Find the median element
+            int mid = arr.Count / 2;
+            float median;
+            if (arr.Count % 2 == 0)
+            {
+                median = (arr[mid - 1] + arr[mid]) / 2.0f;
+            }
+            else
+            {
+                median = arr[mid];
+            }
+
+            return median;
+        }
+
+        public static float[,] MedianTask(Bitmap source)
+        {
+
+            var width = source.Width;
+            var height = source.Height;
+            var medianPixels = new float[width, height];
+            float[,] original = new float[width, height];
+            Color sourceColor;
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                { 
+                    sourceColor = source.GetPixel(x, y);
+                    original[x, y] = sourceColor.GetBrightness();
+                }
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                    medianPixels[x, y] = FindMedian(original);
+            return medianPixels;
+        }
+        public MedianFilter(Bitmap originalImage)
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX, sizeY];
+            var median = new float[sizeX,sizeY];
+            median = MedianTask(originalImage);
+            
+            for (int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    kernel[y, x] = median[y,x];
+
+
+                }
+            }
+        }
     }
 
 }
