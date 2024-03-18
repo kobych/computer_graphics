@@ -122,8 +122,87 @@ namespace Matrix
 
         private void medianToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Filters filter = new MedianFilter(image);
+            Filters filter = new MedianFilter();
             Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void серыйМирToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            Filters filter = new GreyWorld();
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void wavesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new WavesFilter();
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void glassToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new GlassEffect();
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void shiftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new Shift(50,50);
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void rotationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new Rotation(100, 0, 30);
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void binaryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new BinaryFilter();
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void mainColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new MainColorFilter(Color.Aquamarine);
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void maxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new MaxFilter();
+            Bitmap resultImage = filter.processImage(image);
+            pictureBox1.Image = resultImage;
+            pictureBox1.Refresh();
+        }
+
+        private void edgeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters filter = new MaxFilter();
+            Filters filter2 = new MedianFilter();
+            Filters filter3 = new HarraFilter();
+
+            Bitmap resultImage = filter2.processImage(image);
+            resultImage = filter3.processImage(resultImage);
+            resultImage = filter.processImage(resultImage);
+
             pictureBox1.Image = resultImage;
             pictureBox1.Refresh();
         }

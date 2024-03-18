@@ -273,72 +273,84 @@ namespace Matrix
             }
         }
     }
-    class MedianFilter : MatrixFilters
+
+    class MedianFilter : Filters //  Медианный фильтр
     {
-        
-        static float FindMedian(float[,] matrix)
+        protected int Avg;
+        protected int[] newAvg;
+        protected const int size = 9;
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
         {
-            // Flatten the matrix into a 1D array
-            List<float> arr = new List<float>();
-            foreach (var row in matrix)
-            {
-                arr.Add(row);
-            }
-
-            // Sort the array
-            arr.Sort();
-
-            // Find the median element
-            int mid = arr.Count / 2;
-            float median;
-            if (arr.Count % 2 == 0)
-            {
-                median = (arr[mid - 1] + arr[mid]) / 2.0f;
-            }
-            else
-            {
-                median = arr[mid];
-            }
-
-            return median;
-        }
-
-        public static float[,] MedianTask(Bitmap source)
-        {
-
-            var width = source.Width;
-            var height = source.Height;
-            var medianPixels = new float[width, height];
-            float[,] original = new float[width, height];
-            Color sourceColor;
-            for (int x = 0; x < width; x++)
-                for (int y = 0; y < height; y++)
-                { 
-                    sourceColor = source.GetPixel(x, y);
-                    original[x, y] = sourceColor.GetBrightness();
-                }
-            for (int x = 0; x < width; x++)
-                for (int y = 0; y < height; y++)
-                    medianPixels[x, y] = FindMedian(original);
-            return medianPixels;
-        }
-        public MedianFilter(Bitmap originalImage)
-        {
-            int sizeX = 3;
-            int sizeY = 3;
-            kernel = new float[sizeX, sizeY];
-            var median = new float[sizeX,sizeY];
-            median = MedianTask(originalImage);
-            
-            for (int y = 0; y < sizeY; y++)
-            {
-                for (int x = 0; x < sizeX; x++)
+            newAvg = new int[size];
+            int k = 0;
+            for (int i = -1; i <= 1; i++)
+                for (int j = -1; j <= 1; j++)
                 {
-                    kernel[y, x] = median[y,x];
-
-
+                    Color currColor = sourceImage.GetPixel(Clamp(x + i, 0, sourceImage.Width - 1), Clamp(y + j, 0, sourceImage.Height - 1));
+                    newAvg[k++] = (currColor.R + currColor.G + currColor.B) / 3;
+                }
+            Color sourceColor = sourceImage.GetPixel(x, y);
+            Avg = qsort(newAvg, 0, size - 1);
+            Color resultColor = Color.FromArgb(Clamp(Avg, 0, 255), Clamp(Avg, 0, 255), Clamp(Avg, 0, 255));
+            return resultColor;
+        }
+        protected int qsort(int[] a, int l, int r)
+        {
+            int x = a[l + (r - l) / 2], i = l, j = r, temp;
+            while (i <= j)
+            {
+                while (a[i] < x) i++;
+                while (a[j] > x) j--;
+                if (i <= j)
+                {
+                    temp = a[i]; a[i] = a[j]; a[j] = temp;
+                    i++;
+                    j--;
                 }
             }
+            if (i < r) qsort(a, i, r);
+            if (l < j) qsort(a, l, j);
+            return a[l + (r - l) / 2];
+        }
+    }
+
+    class MaxFilter : Filters //  Медианный фильтр
+    {
+        protected int Max;
+        protected int[] newMax;
+        protected const int size = 9;
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            newMax = new int[size];
+            int k = 0;
+            for (int i = -1; i <= 1; i++)
+                for (int j = -1; j <= 1; j++)
+                {
+                    Color currColor = sourceImage.GetPixel(Clamp(x + i, 0, sourceImage.Width - 1), Clamp(y + j, 0, sourceImage.Height - 1));
+                    newMax[k++] = (currColor.R + currColor.G + currColor.B) / 3;
+                }
+            Color sourceColor = sourceImage.GetPixel(x, y);
+            Max = qsort(newMax, 0, size - 1);
+            Color resultColor = Color.FromArgb(Clamp(Max, 0, 255), Clamp(Max, 0, 255), Clamp(Max, 0, 255));
+            return resultColor;
+        }
+        protected int qsort(int[] a, int l, int r)
+        {
+            int x = a[l + (r - l) / 2], i = l, j = r, temp;
+            while (i <= j)
+            {
+                while (a[i] < x) i++;
+                while (a[j] > x) j--;
+                if (i <= j)
+                {
+                    temp = a[i]; a[i] = a[j]; a[j] = temp;
+                    i++;
+                    j--;
+                }
+            }
+            if (i < r) qsort(a, i, r);
+            if (l < j) qsort(a, l, j);
+            return a[r];
         }
     }
 
